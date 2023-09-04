@@ -19,6 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.devsuperior.dscatalog.constants.Constants.ENTITY_NOT_FOUND;
+import static com.devsuperior.dscatalog.constants.Constants.IDENTIFIER_NOT_FOUND;
+import static com.devsuperior.dscatalog.constants.Constants.RECURSO_NAO_ENCONTRADO;
+import static com.devsuperior.dscatalog.constants.Constants.FALHA_NA_INTEGRIDADE_REFERENCIAL;
+
 @Service
 public class ProductService {
 
@@ -37,7 +42,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         Optional<Product> obj = repository.findById(id);
-        Product entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        Product entity = obj.orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND));
         return new ProductDTO(entity, entity.getCategories());
     }
 
@@ -57,19 +62,19 @@ public class ProductService {
             entity = repository.save(entity);
             return new ProductDTO(entity);
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Id not found " + id);
+            throw new ResourceNotFoundException(IDENTIFIER_NOT_FOUND + id);
         }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Recurso não encontrado");
+            throw new ResourceNotFoundException(RECURSO_NAO_ENCONTRADO);
         }
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Falha de integridade referencial");
+            throw new DatabaseException(FALHA_NA_INTEGRIDADE_REFERENCIAL);
         }
     }
 
