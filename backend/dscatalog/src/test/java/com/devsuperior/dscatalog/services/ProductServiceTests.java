@@ -1,17 +1,19 @@
 package com.devsuperior.dscatalog.services;
 
 import com.devsuperior.dscatalog.repositories.ProductRepository;
+import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
@@ -33,13 +35,7 @@ public class ProductServiceTests {
         dependentId = 100L;
 
         doNothing().when(repository).deleteById(existingId);
-    }
-
-    @Test
-    public void deleteShouldDoNothingWhenIdExists() {
-        assertThrows(ResourceNotFoundException.class, () -> {
-            service.delete(existingId);
-        });
+        doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
 
         when(repository.existsById(existingId)).thenReturn(true);
         when(repository.existsById(nonExistingId)).thenReturn(false);
@@ -47,9 +43,23 @@ public class ProductServiceTests {
     }
 
     @Test
+    public void deleteShouldDoNothingWhenIdExists() {
+        assertDoesNotThrow(() -> {
+            service.delete(existingId);
+        });
+    }
+
+    @Test
     public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
         assertThrows(ResourceNotFoundException.class, () -> {
             service.delete(nonExistingId);
+        });
+    }
+
+    @Test
+    public void deleteShouldThrowDatabaseExceptionWhenDependentId() {
+        assertThrows(DatabaseException.class, () -> {
+            service.delete(dependentId);
         });
     }
 }
