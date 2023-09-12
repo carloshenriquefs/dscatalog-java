@@ -56,12 +56,14 @@ public class ProductServiceTests {
         nonExistingId = 2L;
         dependentId = 3L;
         product = Factory.createProduct();
-        productDTO = Factory.createProductDTO();
+        productDTO = Factory.createProductDTO(product);
         category = Factory.createCategory();
         page = new PageImpl<>(List.of(product));
 
         doNothing().when(productRepository).deleteById(existingId);
         doThrow(DataIntegrityViolationException.class).when(productRepository).deleteById(dependentId);
+
+        when(productRepository.save(any())).thenReturn(product);
 
         when(productRepository.existsById(existingId)).thenReturn(true);
         when(productRepository.existsById(nonExistingId)).thenReturn(false);
