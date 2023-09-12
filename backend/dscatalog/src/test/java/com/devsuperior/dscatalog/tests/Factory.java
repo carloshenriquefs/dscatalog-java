@@ -19,6 +19,12 @@ public class Factory {
         return new ProductDTO(product, product.getCategories());
     }
 
+    public static ProductDTO createProductDTO(Long id) {
+        ProductDTO dto = createProductDTO();
+        dto.setId(id);
+        return dto;
+    }
+
     public static Category createCategory() {
         return new Category(1L, "Eletronics");
     }
