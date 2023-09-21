@@ -29,3 +29,13 @@
   ```POST``` - insert <br />
   ```PUT``` - "/{id}" - update <br />
   ```DELETE``` - "/{id}" - delete <br />
+
+##
+
+#### 	:technologist:  - User:
+
+  ```GET``` - findAll <br />
+  ```GET``` - "/{id}" - findById <br />
+  ```POST``` - insert <br />
+  ```PUT``` - "/{id}" - update <br />
+  ```DELETE``` - "/{id}" - delete <br />
