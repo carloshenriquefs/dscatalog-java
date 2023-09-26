@@ -1,4 +1,4 @@
-# Project DSCatalog
+# Project DS-Catalog
 
 - Projeto consiste em um sistema de catálogo de produtos; 
 
