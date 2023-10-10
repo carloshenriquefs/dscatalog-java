@@ -19,29 +19,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.devsuperior.dscatalog.constants.Constants.ENTITY_NOT_FOUND;
-import static com.devsuperior.dscatalog.constants.Constants.IDENTIFIER_NOT_FOUND;
-import static com.devsuperior.dscatalog.constants.Constants.RECURSO_NAO_ENCONTRADO;
-import static com.devsuperior.dscatalog.constants.Constants.FALHA_NA_INTEGRIDADE_REFERENCIAL;
+import static com.devsuperior.dscatalog.constants.Constants.*;
 
 @Service
 public class ProductService {
 
     @Autowired
-    private ProductRepository repository;
+    private ProductRepository productRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged(Pageable pageable) {
-        Page<Product> list = repository.findAll(pageable);
+        Page<Product> list = productRepository.findAll(pageable);
         return list.map(x -> new ProductDTO(x));
     }
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        Optional<Product> obj = repository.findById(id);
+        Optional<Product> obj = productRepository.findById(id);
         Product entity = obj.orElseThrow(() -> new ResourceNotFoundException(ENTITY_NOT_FOUND));
         return new ProductDTO(entity, entity.getCategories());
     }
@@ -50,16 +47,16 @@ public class ProductService {
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
         copyDtoToEntity(dto, entity);
-        repository.save(entity);
+        productRepository.save(entity);
         return new ProductDTO(entity);
     }
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
         try {
-            Product entity = repository.getReferenceById(id);
+            Product entity = productRepository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
-            entity = repository.save(entity);
+            entity = productRepository.save(entity);
             return new ProductDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(IDENTIFIER_NOT_FOUND + id);
@@ -68,11 +65,11 @@ public class ProductService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
-        if (!repository.existsById(id)) {
+        if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException(RECURSO_NAO_ENCONTRADO);
         }
         try {
-            repository.deleteById(id);
+            productRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(FALHA_NA_INTEGRIDADE_REFERENCIAL);
         }
@@ -92,4 +89,5 @@ public class ProductService {
             entity.getCategories().add(category);
         }
     }
+
 }

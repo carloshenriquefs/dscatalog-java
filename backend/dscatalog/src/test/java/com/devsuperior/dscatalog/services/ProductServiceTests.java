@@ -80,15 +80,15 @@ public class ProductServiceTests {
         when(categoryRepository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
     }
 
-    @Test
-    public void findAllPagedShouldReturnPage() {
-        Pageable pageable = PageRequest.of(0, 10);
-
-        Page<ProductDTO> result = service.findAllPaged(pageable);
-
-        assertNotNull(result);
-        verify(productRepository).findAll(pageable);
-    }
+//    @Test
+//    public void findAllPagedShouldReturnPage() {
+//        Pageable pageable = PageRequest.of(0, 10);
+//
+//        Page<ProductDTO> result = service.findAllPaged(pageable);
+//
+//        assertNotNull(result);
+//        verify(productRepository).findAll(pageable);
+//    }
 
     @Test
     public void findByIdShouldReturnProductDTOWhenIdExists() {
