@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-
     @Query(nativeQuery = true, value = """
             SELECT DISTINCT tb_product.id, tb_product.name
             FROM tb_product
