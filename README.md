@@ -1,6 +1,14 @@
-# Project DS-Catalog
+# :construction: - Project DS-Catalog
 
 - Projeto consiste em um sistema de catálogo de produtos; 
+
+##
+
+## :desktop_computer: - Layout:
+
+![image](https://github.com/carloshenriquefs/dscatalog-java/assets/54969405/2aa4d875-436d-4437-9f98-1acd50ee9dbc)
+![image](https://github.com/carloshenriquefs/dscatalog-java/assets/54969405/547cbe30-efda-4871-9cb4-817697a69168)
+
 
 ##
 
