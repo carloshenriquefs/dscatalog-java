@@ -83,12 +83,12 @@ public class UserService implements UserDetailsService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException(RECURSO_NAO_ENCONTRADO);
+            throw new ResourceNotFoundException(RESOURCE_NOT_FOUND);
         }
         try {
             userRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(FALHA_NA_INTEGRIDADE_REFERENCIAL);
+            throw new DatabaseException(FAILURE_IN_REFERENTIAL_INTEGRITY);
         }
     }
 

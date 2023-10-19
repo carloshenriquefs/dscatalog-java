@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.devsuperior.dscatalog.constants.Constants.ENTITY_NOT_FOUND;
-import static com.devsuperior.dscatalog.constants.Constants.IDENTIFIER_NOT_FOUND;
-import static com.devsuperior.dscatalog.constants.Constants.RECURSO_NAO_ENCONTRADO;
-import static com.devsuperior.dscatalog.constants.Constants.FALHA_NA_INTEGRIDADE_REFERENCIAL;
+import static com.devsuperior.dscatalog.constants.Constants.*;
 
 @Service
 public class CategoryService {
@@ -63,12 +60,12 @@ public class CategoryService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException(RECURSO_NAO_ENCONTRADO);
+            throw new ResourceNotFoundException(RESOURCE_NOT_FOUND);
         }
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(FALHA_NA_INTEGRIDADE_REFERENCIAL);
+            throw new DatabaseException(FAILURE_IN_REFERENTIAL_INTEGRITY);
         }
     }
 }
